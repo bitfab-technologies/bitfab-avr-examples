@@ -1,0 +1,2 @@
+BITFAB-AVR-EXAMPLES, Copyright (C) 2016 BITFAB TECHNOLOGIES LLC. Released under GPL-v3 license.
+
