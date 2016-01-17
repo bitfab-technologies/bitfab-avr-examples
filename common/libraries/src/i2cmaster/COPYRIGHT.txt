@@ -1,0 +1,3 @@
+i2cmaster, Copyright (C) 2006 Peter Fleury. http://tinyurl.com/peterfleury
+Released under the GPL-v3 license.
+
