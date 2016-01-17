@@ -6,6 +6,7 @@
 ## General Flags
 PROJECT = read_xyz
 MCU = at90can128
+F_CPU = 8000000
 TARGET = $(PROJECT).elf
 CC = avr-gcc
 
@@ -15,6 +16,7 @@ COMMON = -mmcu=$(MCU)
 ## Compile options common for all C compilation units.
 CFLAGS = $(COMMON)
 CFLAGS += -Wall -gdwarf-2  -O0 -funsigned-char -funsigned-bitfields
+CFLAGS += -DF_CPU=$(F_CPU)
 CFLAGS += -MD -MP -MT $(*F).o -MF dep/$(@F).d 
 
 ## Assembly specific flags

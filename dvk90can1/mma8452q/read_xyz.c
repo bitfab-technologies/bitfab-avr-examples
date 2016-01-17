@@ -1,9 +1,13 @@
 #include <avr/io.h>
+#include <avr/interrupt.h>
 #include <util/delay.h>
 #include "i2cmaster.h"
 #include "uartcomm.h"
 
+#ifndef F_CPU
 #define F_CPU  8000000  // 8MHz
+#endif
+
 #define MMA8452Q_TWI_ADDRESS  0x3a  // 0x1d << 1 for r/w bit
 
 
@@ -18,7 +22,7 @@ int main(void)
 
     // send a power-on message to anyone listening on UART
     uart_init( _UBRR( F_CPU, 9600) );
-    put_string( "[Bitfab Technoloiges LLC. EXAMPLE]\r\nProgram: read_xyz\r\nHardware: DVK90CAN1 + MMA8452Q (0x1D)\r\nLicense: GPL v3\r\n\0" );
+    put_string( "[Bitfab Technologies LLC. EXAMPLE]\r\nProgram: read_xyz\r\nHardware: DVK90CAN1 + MMA8452Q (0x1D)\r\nLicense: GPL v3\r\n\0" );
 
     i2c_init();
 
