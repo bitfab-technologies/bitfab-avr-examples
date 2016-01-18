@@ -1,10 +1,10 @@
 
 ###############################################################################
-# Makefile for the project at90can128::read_xyz
+# Makefile for the project at90can128::read_PAT
 ###############################################################################
 
 ## General Flags
-PROJECT = read_xyz
+PROJECT = read_PAT
 MCU = at90can128
 F_CPU = 8000000
 TARGET = $(PROJECT).elf

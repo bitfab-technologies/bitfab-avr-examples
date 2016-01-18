@@ -8,14 +8,13 @@
 #define F_CPU  8000000  // 8MHz
 #endif
 
-#define MMA8452Q_TWI_ADDRESS  0x3a  // 0x1d << 1 for r/w bit
-#define REG_WHO_AM_I  0x0d
-#define MMA8452Q_DID  0x2a
-#define REG_CTRL_REG1  0x2a
-#define REG_XYZ_DATA_CFG  0x0e
-#define REG_OUT_X_MSB  0x01
+#define MPL3115a2_TWI_ADDRESS  0xC0
+#define REG_WHO_AM_I  0x0C
+#define MPL3115a2_DID  0x0C
+#define REG_CTRL_REG1  0x26
+#define REG_PT_DATA_CFG  0x13
+#define REG_OUT_P_MSB  0x01
 
-#define FULL_SCALE_RANGE_G  2  // 2g, 4g, 8g
 
 static FILE uartout = FDEV_SETUP_STREAM(put_char, NULL, _FDEV_SETUP_WRITE);
 
@@ -26,6 +25,9 @@ void err_dwell() {
         _delay_ms(997);
     }
 }
+
+
+
 
 int main(void) {
     stdout = &uartout;  // required for printf
@@ -39,13 +41,17 @@ int main(void) {
 
     // send a power-on message to anyone listening on UART
     uart_init( _UBRR( F_CPU, 9600) );
-    put_string( "[Bitfab Technologies LLC. EXAMPLE]\r\nProgram: read_xyz\r\nHardware: DVK90CAN1 + MMA8452Q (0x1D)\r\nLicense: GPL v3\r\n\0" );
+    put_string( "[Bitfab Technologies LLC. EXAMPLE]\r\nProgram: read_xyz\r\nHardware: DVK90CAN1 + MPL3115a2 (0xC0)\r\nLicense: GPL v3\r\n\0" );
 
     i2c_init();
 
+
     // start condition, device address, write mode
     unsigned char ret;
-    ret = i2c_start( MMA8452Q_TWI_ADDRESS + I2C_WRITE );
+    ret = i2c_start( MPL3115a2_TWI_ADDRESS + I2C_WRITE );
+
+    #define STANDARD_PRESSURE 101325 // kPa at STP
+
 
     if ( ret ) {
         // failed to issue start condition, possibly no device found
@@ -70,7 +76,7 @@ int main(void) {
         // increment progress LEDs.
         PORTA += 1;
 
-        ret = i2c_rep_start( MMA8452Q_TWI_ADDRESS + I2C_READ );
+        ret = i2c_rep_start( MLP3115a2_TWI_ADDRESS + I2C_READ );
         if( ret ) {
             put_string( "[ERROR] TWI: failed to issue repeat start for read.\r\n\0" );
             err_dwell();
@@ -80,17 +86,17 @@ int main(void) {
         PORTA += 1;
 
         ret = i2c_readNak();
-        if( MMA8452Q_DID != ret ) {
-            put_string( "[ERROR] TWI: failed to identify the MMA8452Q, identifier value mismatch.\r\n\0" );
+        if( MLP3115a2_DID != ret ) {
+            put_string( "[ERROR] TWI: failed to identify the MLP3115a2, identifier value mismatch.\r\n\0" );
             err_dwell();
         }
 
-        put_string( "TWI: identified MMA8452Q.\r\n\0" );
+        put_string( "TWI: identified MLP3115a2.\r\n\0" );
 
         // increment progress LEDs.
         PORTA += 1;
 
-        ret = i2c_rep_start( MMA8452Q_TWI_ADDRESS + I2C_WRITE );
+        ret = i2c_rep_start( MLP3115a2_TWI_ADDRESS + I2C_WRITE );
         if( ret ) {
             put_string( "[ERROR] TWI: failed to issue repeat start for write.\r\n\0" );
             err_dwell();
@@ -108,7 +114,7 @@ int main(void) {
         // increment progress LEDs.
         PORTA += 1;
 
-        ret = i2c_rep_start( MMA8452Q_TWI_ADDRESS + I2C_READ );
+        ret = i2c_rep_start( MLP3115a2_TWI_ADDRESS + I2C_READ );
         if( ret ) {
             put_string( "[ERROR] TWI: failed to issue repeat start for read.\r\n\0" );
             err_dwell();
@@ -120,13 +126,15 @@ int main(void) {
         ret = i2c_readNak();
         put_string( "TWI: retrieved the value of CTRL_REG1.\r\n\0" );
 
-        // clear the active bit
-        unsigned char ctrl_reg1_value = ret & ~(0x01);
+
+        // clear the active bit, set to ALT mode
+        unsigned char ctrl_reg1_value = ret & ~(0x01) | (0x80) ;
+
 
         // increment progress LEDs.
         PORTA += 1;
 
-        ret = i2c_rep_start( MMA8452Q_TWI_ADDRESS + I2C_WRITE );
+        ret = i2c_rep_start( MLP3115a2_TWI_ADDRESS + I2C_WRITE );
         if( ret ) {
             put_string( "[ERROR] TWI: failed to issue repeat start for write.\r\n\0" );
             err_dwell();
@@ -155,7 +163,7 @@ int main(void) {
         PORTA += 1;
 
         put_string( "MCU: attempting to write configuration changes to device.\r\n\0" );
-        ret = i2c_rep_start( MMA8452Q_TWI_ADDRESS + I2C_WRITE );
+        ret = i2c_rep_start( MLP3115a2_TWI_ADDRESS + I2C_WRITE );
         if( ret ) {
             put_string( "[ERROR] TWI: failed to issue repeat start for write.\r\n\0" );
             err_dwell();
@@ -164,7 +172,7 @@ int main(void) {
         // increment progress LEDs.
         PORTA += 1;
 
-        ret = i2c_write( REG_XYZ_DATA_CFG );
+        ret = i2c_write( REG_PT_DATA_CFG );
         if( ret ) {
             put_string( "[ERROR] TWI: failed to write the address of the REG_XYZ_DATA_CFG register.\r\n\0" );
             err_dwell();
@@ -173,11 +181,9 @@ int main(void) {
         // increment progress LEDs.
         PORTA += 1;
 
-        // 0b00000010 >> 2 == 0b00000000  :=  2g
-        // 0b00000100 >> 2 == 0b00000001  :=  4g
-        // 0b00001000 >> 2 == 0b00000010  :=  8g
-        unsigned char fsr_value = FULL_SCALE_RANGE_G >> 2;
-        ret = i2c_write( fsr_value );
+        // enable altitude and temp measurement
+        unsigned char PT_flag_enable = 0x07;
+        ret = i2c_write( PT_flag_enable );
         if( ret ) {
             put_string( "[ERROR] TWI: failed to write the new value of the REG_XYZ_DATA_CFG register.\r\n\0" );
             err_dwell();
@@ -186,7 +192,7 @@ int main(void) {
         // increment progress LEDs.
         PORTA += 1;
 
-        ret = i2c_rep_start( MMA8452Q_TWI_ADDRESS + I2C_WRITE );
+        ret = i2c_rep_start( MLP3115a2_TWI_ADDRESS + I2C_WRITE );
         if( ret ) {
             put_string( "[ERROR] TWI: failed to issue repeat start for write.\r\n\0" );
             err_dwell();
@@ -231,7 +237,7 @@ int main(void) {
 
             // start condition, device address, write mode
             unsigned char ret;
-            ret = i2c_start( MMA8452Q_TWI_ADDRESS + I2C_WRITE );
+            ret = i2c_start( MLP3115a2_TWI_ADDRESS + I2C_WRITE );
 
             if ( ret ) {
                 // failed to issue start condition, possibly no device found
@@ -244,13 +250,13 @@ int main(void) {
             else {
                 put_string( "TWI: issued start condition.\r\n\0" );
 
-                ret = i2c_write( REG_OUT_X_MSB );
+                ret = i2c_write( REG_OUT_P_MSB );
                 if( ret ) {
                     put_string( "[ERROR] TWI: failed to write the address of the OUT_X_MSB register.\r\n\0" );
                     err_dwell();
                 }
 
-                ret = i2c_rep_start( MMA8452Q_TWI_ADDRESS + I2C_READ );
+                ret = i2c_rep_start( MLP3115a2_TWI_ADDRESS + I2C_READ );
                 if( ret ) {
                     put_string( "[ERROR] TWI: failed to issue repeat start for read.\r\n\0" );
                     err_dwell();
