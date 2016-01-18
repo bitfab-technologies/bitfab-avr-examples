@@ -76,7 +76,7 @@ int main(void) {
         // increment progress LEDs.
         PORTA += 1;
 
-        ret = i2c_rep_start( MLP3115a2_TWI_ADDRESS + I2C_READ );
+        ret = i2c_rep_start( MPL3115a2_TWI_ADDRESS + I2C_READ );
         if( ret ) {
             put_string( "[ERROR] TWI: failed to issue repeat start for read.\r\n\0" );
             err_dwell();
@@ -86,17 +86,17 @@ int main(void) {
         PORTA += 1;
 
         ret = i2c_readNak();
-        if( MLP3115a2_DID != ret ) {
-            put_string( "[ERROR] TWI: failed to identify the MLP3115a2, identifier value mismatch.\r\n\0" );
+        if( MPL3115a2_DID != ret ) {
+            put_string( "[ERROR] TWI: failed to identify the MPL3115a2, identifier value mismatch.\r\n\0" );
             err_dwell();
         }
 
-        put_string( "TWI: identified MLP3115a2.\r\n\0" );
+        put_string( "TWI: identified MPL3115a2.\r\n\0" );
 
         // increment progress LEDs.
         PORTA += 1;
 
-        ret = i2c_rep_start( MLP3115a2_TWI_ADDRESS + I2C_WRITE );
+        ret = i2c_rep_start( MPL3115a2_TWI_ADDRESS + I2C_WRITE );
         if( ret ) {
             put_string( "[ERROR] TWI: failed to issue repeat start for write.\r\n\0" );
             err_dwell();
@@ -114,7 +114,7 @@ int main(void) {
         // increment progress LEDs.
         PORTA += 1;
 
-        ret = i2c_rep_start( MLP3115a2_TWI_ADDRESS + I2C_READ );
+        ret = i2c_rep_start( MPL3115a2_TWI_ADDRESS + I2C_READ );
         if( ret ) {
             put_string( "[ERROR] TWI: failed to issue repeat start for read.\r\n\0" );
             err_dwell();
@@ -134,7 +134,7 @@ int main(void) {
         // increment progress LEDs.
         PORTA += 1;
 
-        ret = i2c_rep_start( MLP3115a2_TWI_ADDRESS + I2C_WRITE );
+        ret = i2c_rep_start( MPL3115a2_TWI_ADDRESS + I2C_WRITE );
         if( ret ) {
             put_string( "[ERROR] TWI: failed to issue repeat start for write.\r\n\0" );
             err_dwell();
@@ -163,7 +163,7 @@ int main(void) {
         PORTA += 1;
 
         put_string( "MCU: attempting to write configuration changes to device.\r\n\0" );
-        ret = i2c_rep_start( MLP3115a2_TWI_ADDRESS + I2C_WRITE );
+        ret = i2c_rep_start( MPL3115a2_TWI_ADDRESS + I2C_WRITE );
         if( ret ) {
             put_string( "[ERROR] TWI: failed to issue repeat start for write.\r\n\0" );
             err_dwell();
@@ -192,7 +192,7 @@ int main(void) {
         // increment progress LEDs.
         PORTA += 1;
 
-        ret = i2c_rep_start( MLP3115a2_TWI_ADDRESS + I2C_WRITE );
+        ret = i2c_rep_start( MPL3115a2_TWI_ADDRESS + I2C_WRITE );
         if( ret ) {
             put_string( "[ERROR] TWI: failed to issue repeat start for write.\r\n\0" );
             err_dwell();
@@ -237,7 +237,7 @@ int main(void) {
 
             // start condition, device address, write mode
             unsigned char ret;
-            ret = i2c_start( MLP3115a2_TWI_ADDRESS + I2C_WRITE );
+            ret = i2c_start( MPL3115a2_TWI_ADDRESS + I2C_WRITE );
 
             if ( ret ) {
                 // failed to issue start condition, possibly no device found
@@ -256,7 +256,7 @@ int main(void) {
                     err_dwell();
                 }
 
-                ret = i2c_rep_start( MLP3115a2_TWI_ADDRESS + I2C_READ );
+                ret = i2c_rep_start( MPL3115a2_TWI_ADDRESS + I2C_READ );
                 if( ret ) {
                     put_string( "[ERROR] TWI: failed to issue repeat start for read.\r\n\0" );
                     err_dwell();
