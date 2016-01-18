@@ -132,7 +132,7 @@ int main(void) {
             put_string( "[ERROR] TWI: failed to write the address of the CTRL_REG1 register.\r\n\0" );
             err_dwell();
         }
-        i2c_writeNak( ctrl_reg1_value | 8 ); // here is said magic
+        i2c_write( ctrl_reg1_value | 8 ); // here is said magic
         PORTA += 1;  // increment progress LEDs.
 
 
