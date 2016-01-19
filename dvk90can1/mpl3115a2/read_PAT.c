@@ -10,7 +10,7 @@
 
 #define MPL3115a2_TWI_ADDRESS  0xC0
 #define REG_WHO_AM_I  0x0C
-#define MPL3115a2_DID  0x0C
+#define MPL3115a2_DID  0xC4
 #define REG_CTRL_REG1  0x26
 #define REG_PT_DATA_CFG  0x13
 #define REG_OUT_P_MSB  0x01
