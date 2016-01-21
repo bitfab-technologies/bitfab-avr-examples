@@ -233,7 +233,7 @@ int main(void) {
             // increment progress LEDs.
             PORTA += 1;
 
-            unsigned char raw_data[6];
+            unsigned char raw_data[3];
 
             // start condition, device address, write mode
             unsigned char ret;
@@ -264,41 +264,39 @@ int main(void) {
 
                 // multibyte read of contiguous data registers from device
                 // this takes advantage of built-in read address auto-increment
-                raw_data[0] = i2c_readAck();
-                raw_data[1] = i2c_readAck();
-                raw_data[2] = i2c_readAck();
-                raw_data[3] = i2c_readAck();
-                raw_data[4] = i2c_readAck();
+                raw_data[0] = i2c_readAck();  //REG_OUT_P_MSB
+                raw_data[1] = i2c_readAck();  //REG_OUT_P_CSB
+		raw_data[2] = i2c_readNak();  //REG_OUT_P_LSB
                 // last byte read issues NAK
-                raw_data[5] = i2c_readNak();
+                
 
                 i2c_stop();
             }
 
-            int16_t accel3[3] = {0, 0, 0};  // x, y, z
+            int32_t alti1[1] = {0};  //  kPa
 
             // Loop to calculate 12-bit ADC and g value for each axis
             uint8_t i;
-            for(i = 0; i < 3 ; ++i)
+            for(i = 0; i < 1 ; ++i)
             {
-                // combine the two 8 bit registers into one 12-bit number
-                int16_t accel_value = (8 << raw_data[i*2]) | raw_data[(i*2)+1];
+                // combine the two 8 bit one 4 bit  registers into one 20-bit number, LSB is 4 bits, padding on right
+                int32_t alti_value = (16 << raw_data[i*3]) | 8 << raw_data[(i*3)+1 | raw_data[(i*3)+2];
                 // the two registers represent a right-aligned 12-bit value
                 // therefore, shift right appropriately in this case
-                accel_value >>= 4;
+                alti_value >>= 4;
 
                 // determine if the value would have been negative if it
-                // were actually 16 bit instead of 12 bit
-                if (0x7F < raw_data[i*2])
+                // were actually 24 bit instead of 20 bit
+                if (0x7FF < raw_data[i*3])
                 {  
-                  accel_value -= 0x1000;
+                  alti_value -= 0x100000;
                 }
 
-                accel3[i] = accel_value;
+                alti1[i] = alti_value;
             }
 
             // print the data over serial for humanoids
-            printf( "accel3 = (%d, %d, %d)\r\n", accel3[0], accel3[1], accel3[2] );
+            printf( "alti1 = (%d)\r\n", alti1[0] );
 
             _delay_ms(997);
         }
