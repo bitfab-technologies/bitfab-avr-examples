@@ -296,7 +296,7 @@ int main(void) {
             }
 
             // print the data over serial for humanoids
-            printf( "alti1 = (%ll)\r\n", alti1[0] );
+            printf( "alti1 = (%z)\r\n", alti1[0] );
 
             _delay_ms(997);
         }
