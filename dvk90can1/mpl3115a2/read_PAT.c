@@ -294,9 +294,9 @@ int main(void) {
 
                 alti1[i] = alti_value;
             }
-
+	    int x;
             // print the data over serial for humanoids
-            printf( "alti1 = (%z)\r\n", alti1[0] );
+            printf( "alti1 = (%d)\r\n", sizeof(x));
 
             _delay_ms(997);
         }
