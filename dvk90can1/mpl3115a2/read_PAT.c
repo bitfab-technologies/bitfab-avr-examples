@@ -280,7 +280,7 @@ int main(void) {
             for(i = 0; i < 1 ; ++i)
             {
                 // combine the two 8 bit one 4 bit  registers into one 20-bit number, LSB is 4 bits, padding on right
-                int32_t alti_value = (16 << raw_data[i*3]) | 8 << raw_data[(i*3)+1 | raw_data[(i*3)+2];
+                int32_t alti_value = (16 << raw_data[i*3]) | 8 << raw_data[(i*3)+1] | raw_data[(i*3)+2];
                 // the two registers represent a right-aligned 12-bit value
                 // therefore, shift right appropriately in this case
                 alti_value >>= 4;
@@ -296,7 +296,7 @@ int main(void) {
             }
 
             // print the data over serial for humanoids
-            printf( "alti1 = (%d)\r\n", alti1[0] );
+            printf( "alti1 = (%ll)\r\n", alti1[0] );
 
             _delay_ms(997);
         }
