@@ -229,6 +229,29 @@ int main(void) {
         put_string( "MCU: starting device data read, parse, and present loop.\r\n\0" );
 
         // data read loop
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         for(;;) {
             // increment progress LEDs.
             PORTA += 1;
