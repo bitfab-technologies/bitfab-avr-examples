@@ -15,7 +15,7 @@
 #define REG_PT_DATA_CFG  0x13
 #define REG_OUT_P_MSB  0x01
 
-
+#define STANDARD PRESSURE 101325 //kPa
 static FILE uartout = FDEV_SETUP_STREAM(put_char, NULL, _FDEV_SETUP_WRITE);
 
 void err_dwell() {
@@ -25,9 +25,6 @@ void err_dwell() {
         _delay_ms(997);
     }
 }
-
-
-
 
 int main(void) {
     stdout = &uartout;  // required for printf
@@ -41,7 +38,7 @@ int main(void) {
 
     // send a power-on message to anyone listening on UART
     uart_init( _UBRR( F_CPU, 9600) );
-    put_string( "[Bitfab Technologies LLC. EXAMPLE]\r\nProgram: read_xyz\r\nHardware: DVK90CAN1 + MPL3115a2 (0xC0)\r\nLicense: GPL v3\r\n\0" );
+    put_string( "[Bitfab Technologies LLC. EXAMPLE]\r\nProgram: read_PAT\r\nHardware: DVK90CAN1 + MPL3115a2 (0xC0)\r\nLicense: GPL v3\r\n\0" );
 
     i2c_init();
 
@@ -49,8 +46,6 @@ int main(void) {
     // start condition, device address, write mode
     unsigned char ret;
     ret = i2c_start( MPL3115a2_TWI_ADDRESS + I2C_WRITE );
-
-    #define STANDARD_PRESSURE 101325 // kPa at STP
 
 
     if ( ret ) {
