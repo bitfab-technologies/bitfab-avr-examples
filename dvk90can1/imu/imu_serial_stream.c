@@ -10,6 +10,8 @@
 #define F_CPU  8000000  // 8MHz
 #endif
 
+#define DATA_BUFFER_SIZE 8
+
 // Accelerometer, MMA8452Q
 #define MMA8452Q_TWI_ADDRESS  0x3a  // 0x1d << 1 for r/w bit
 #define MMA8452Q_REG_WHO_AM_I  0x0d
@@ -63,13 +65,13 @@ typedef enum {
 	kReset,
 	kPauseAndRetryCurrent,
 	kSelfTest,
-	kTestAccelerometer,
+	kInitAccelerometer,
 	kReadAccelerometer,
-	kTestGyroscope,
+	kInitGyroscope,
 	kReadGyroscope,
-	kTestMagnetometer,
+	kInitMagnetometer,
 	kReadMagnetometer,
-	kTestAltimeter,
+	kInitAltimeter,
 	kReadAltimeter,
 	kPrintCurrentData,
 	kFinish
@@ -111,6 +113,32 @@ void success_dwell() {
 	}
 }
 
+unsigned char* twi_read( unsigned char twi_address, unsigned char register_address, unsigned int bytes ) {
+
+	unsigned char errorCode = 0;
+	unsigned char* data_buffer = NULL;
+
+	errorCode |= i2c_start( twi_address + I2C_WRITE );
+
+	errorCode |= i2c_write( register_address );
+	errorCode |= i2c_rep_start( twi_address + I2C_READ );
+
+	if( 0 == errorCode ) {
+
+		data_buffer = malloc(bytes);
+		int i;
+		for(i=0; i < bytes; ++i)
+		{
+			data_buffer[i] = i2c_readAck();
+		}
+		data_buffer[i] = i2c_readNak();
+	}
+
+	i2c_stop();
+
+	return data_buffer;
+}
+
 int main(void) {
     stdout = &uartout;  // required for printf
     uart_init( _UBRR( F_CPU, 9600) );
@@ -136,7 +164,13 @@ int main(void) {
     {
     	subsystemPassedTest[i] = false;
     }
-    unsigned char twiReturnValue = 0;
+    unsigned char errorCode = 0;
+    unsigned char buffer[DATA_BUFFER_SIZE];
+    for(i=0; i < DATA_BUFFER_SIZE; ++i)
+    {
+    	buffer[i] = 0;
+    }
+
     unsigned int pauseDuration = 1000;  // ms
     unsigned int retryCounter = 0;
 
@@ -200,22 +234,23 @@ int main(void) {
 							case kAccelerometer:
 							{
 								// setup
-								twiReturnValue = 0;
+								errorCode = 0;
 
-								// test
-								twiReturnValue |= i2c_start( MMA8452Q_TWI_ADDRESS + I2C_WRITE );
+								// device presence check
+								unsigned char* data = twi_read( MMA8452Q_TWI_ADDRESS, MMA8452Q_REG_WHO_AM_I, 1 );
 
-								twiReturnValue |= i2c_write( MMA8452Q_REG_WHO_AM_I );
-								twiReturnValue |= i2c_rep_start( MMA8452Q_TWI_ADDRESS + I2C_READ );
+								if( NULL == data ) {
 
-								if( 0 == twiReturnValue ) {
-									twiReturnValue = ( MMA8452Q_DID == i2c_readNak() ) ? 0 : twiReturnValue;
+									errorCode = 2;
+								}
+								else {
+
+									if( !(MMA8452Q_DID == data[0]) ) errorCode = 1;
+									free(data);
 								}
 
-								i2c_stop();
-
 								// handle issue(s) / error(s)
-								if( twiReturnValue ) {
+								if( errorCode ) {
 									// fail
 									printf( "Accelerometer\t\t\t\t[FAIL]\n" );
 									subsystemPassedTest[kAccelerometer] = false;
@@ -232,22 +267,23 @@ int main(void) {
 							case kGyroscope:
 							{
 								// setup
-								twiReturnValue = 0;
+								errorCode = 0;
 
-								// test
-								twiReturnValue |= i2c_start( L3G4200D_TWI_ADDRESS + I2C_WRITE );
+								// device presence check
+								unsigned char* data = twi_read( L3G4200D_TWI_ADDRESS, L3G4200D_REG_WHO_AM_I, 1 );
 
-								twiReturnValue |= i2c_write( L3G4200D_REG_WHO_AM_I );
-								twiReturnValue |= i2c_rep_start( L3G4200D_TWI_ADDRESS + I2C_READ );
+								if( NULL == data ) {
 
-								if( 0 == twiReturnValue ) {
-									twiReturnValue = ( L3G4200D_DID == i2c_readNak() ) ? 0 : twiReturnValue;
+									errorCode = 2;
+								}
+								else {
+
+									if( !(L3G4200D_DID == data[0]) ) errorCode = 1;
+									free(data);
 								}
 
-								i2c_stop();
-
 								// handle issue(s) / error(s)
-								if( twiReturnValue ) {
+								if( errorCode ) {
 									// fail
 									printf( "Gyroscope\t\t\t\t[FAIL]\n" );
 									subsystemPassedTest[kGyroscope] = false;
@@ -264,28 +300,27 @@ int main(void) {
 							case kMagnetometer:
 							{
 								// setup
-								twiReturnValue = 0;
+								errorCode = 0;
 
 								// test
-								twiReturnValue |= i2c_start( HMC5983_TWI_ADDRESS + I2C_WRITE );
+								unsigned char* data = twi_read( HMC5983_TWI_ADDRESS, HMC5983_REG_ID_A, 3 );
 
-								twiReturnValue |= i2c_write( HMC5983_REG_ID_A );
-								twiReturnValue |= i2c_rep_start( HMC5983_TWI_ADDRESS + I2C_READ );
+								if( NULL == data ) {
+									errorCode = 2;
+								}
+								else {
+									if( ! (HMC5983_DID_A == data[0] && 
+										   HMC5983_DID_B == data[1] && 
+										   HMC5983_DID_C == data[2]) ) {
 
-								if( 0 == twiReturnValue ) {
-									twiReturnValue = ( HMC5983_DID_A == i2c_readAck() ) ? 0 : twiReturnValue;
-								}
-								if( 0 == twiReturnValue ) {
-									twiReturnValue = ( HMC5983_DID_B == i2c_readAck() ) ? 0 : twiReturnValue;
-								}
-								if( 0 == twiReturnValue ) {
-									twiReturnValue = ( HMC5983_DID_C == i2c_readNak() ) ? 0 : twiReturnValue;
-								}
+										errorCode = 1;
+									}
 
-								i2c_stop();
+									free(data);
+								}
 
 								// handle issue(s) / error(s)
-								if( twiReturnValue ) {
+								if( errorCode ) {
 									// fail
 									printf( "Magnetometer\t\t\t\t[FAIL]\n" );
 									subsystemPassedTest[kMagnetometer] = false;
@@ -302,22 +337,23 @@ int main(void) {
 							case kAltimeter:
 							{
 								// setup
-								twiReturnValue = 0;
+								errorCode = 0;
 
-								// test
-								twiReturnValue |= i2c_start( MPL3115A2_TWI_ADDRESS + I2C_WRITE );
+								// device presence check
+								unsigned char* data = twi_read( MPL3115A2_TWI_ADDRESS, MPL3115A2_REG_WHO_AM_I, 1 );
 
-								twiReturnValue |= i2c_write( MPL3115A2_REG_WHO_AM_I );
-								twiReturnValue |= i2c_rep_start( MPL3115A2_TWI_ADDRESS + I2C_READ );
+								if( NULL == data ) {
 
-								if( 0 == twiReturnValue ) {
-									twiReturnValue = ( MPL3115A2_DID == i2c_readNak() ) ? 0 : twiReturnValue;
+									errorCode = 2;
+								}
+								else {
+
+									if( !(MPL3115A2_DID == data[0]) ) errorCode = 1;
+									free(data);
 								}
 
-								i2c_stop();
-
 								// handle issue(s) / error(s)
-								if( twiReturnValue ) {
+								if( errorCode ) {
 									// fail
 									printf( "Altimeter\t\t\t\t[FAIL]\n" );
 									subsystemPassedTest[kAltimeter] = false;
@@ -339,6 +375,64 @@ int main(void) {
 				{
 					if( ! subsystemPassedTest[i] ) nextState = kPauseAndRetryCurrent;
 				}
+			}
+			break;
+
+			case kInitAccelerometer:
+			{
+				errorCode = 0;
+
+				errorCode |= i2c_rep_start( MMA8452Q_TWI_ADDRESS + I2C_WRITE );
+				errorCode |= i2c_write( MMA8452Q_REG_CTRL_REG1 );
+
+				errorCode |= i2c_rep_start( MMA8452Q_TWI_ADDRESS + I2C_READ );
+
+				if( 0 == errorCode ) {
+					buffer[0] = i2c_readNak();
+				}
+
+			}
+			break;
+
+			case kInitGyroscope:
+			{
+
+			}
+			break;
+
+			case kInitMagnetometer:
+			{
+
+			}
+			break;
+
+			case kInitAltimeter:
+			{
+
+			}
+			break;
+
+			case kReadAccelerometer:
+			{
+
+			}
+			break;
+
+			case kReadGyroscope:
+			{
+
+			}
+			break;
+
+			case kReadMagnetometer:
+			{
+
+			}
+			break;
+
+			case kReadAltimeter:
+			{
+
 			}
 			break;
 
