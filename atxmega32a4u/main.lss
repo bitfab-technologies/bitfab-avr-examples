@@ -1,0 +1,290 @@
+
+main.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         00000236  00000000  00000000  00000054  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .stab         000006cc  00000000  00000000  0000028c  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  2 .stabstr      00000054  00000000  00000000  00000958  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  3 .comment      00000011  00000000  00000000  000009ac  2**0
+                  CONTENTS, READONLY
+  4 .debug_aranges 00000028  00000000  00000000  000009bd  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   00000767  00000000  00000000  000009e5  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 00000206  00000000  00000000  0000114c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   00000128  00000000  00000000  00001352  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  00000064  00000000  00000000  0000147c  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    000004fc  00000000  00000000  000014e0  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_ranges 00000018  00000000  00000000  000019dc  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 bc 00 	jmp	0x178	; 0x178 <__ctors_end>
+   4:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+   8:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+   c:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  10:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  14:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  18:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  1c:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  20:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  24:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  28:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  2c:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  30:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  34:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  38:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  3c:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  40:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  44:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  48:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  4c:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  50:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  54:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  58:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  5c:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  60:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  64:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  68:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  6c:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  70:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  74:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  78:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  7c:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  80:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  84:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  88:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  8c:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  90:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  94:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  98:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  9c:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  a0:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  a4:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  a8:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  ac:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  b0:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  b4:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  b8:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  bc:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  c0:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  c4:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  c8:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  cc:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  d0:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  d4:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  d8:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  dc:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  e0:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  e4:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  e8:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  ec:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  f0:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  f4:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  f8:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+  fc:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+ 100:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+ 104:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+ 108:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+ 10c:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+ 110:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+ 114:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+ 118:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+ 11c:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+ 120:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+ 124:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+ 128:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+ 12c:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+ 130:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+ 134:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+ 138:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+ 13c:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+ 140:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+ 144:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+ 148:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+ 14c:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+ 150:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+ 154:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+ 158:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+ 15c:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+ 160:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+ 164:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+ 168:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+ 16c:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+ 170:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+ 174:	0c 94 c6 00 	jmp	0x18c	; 0x18c <__bad_interrupt>
+
+00000178 <__ctors_end>:
+ 178:	11 24       	eor	r1, r1
+ 17a:	1f be       	out	0x3f, r1	; 63
+ 17c:	cf ef       	ldi	r28, 0xFF	; 255
+ 17e:	df e2       	ldi	r29, 0x2F	; 47
+ 180:	de bf       	out	0x3e, r29	; 62
+ 182:	cd bf       	out	0x3d, r28	; 61
+ 184:	0e 94 08 01 	call	0x210	; 0x210 <main>
+ 188:	0c 94 19 01 	jmp	0x232	; 0x232 <_exit>
+
+0000018c <__bad_interrupt>:
+ 18c:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+00000190 <clock_setup>:
+	//dac_setup();
+}
+
+void clock_setup() {
+	//configure clock to 32MHz
+	OSC.CTRL |= OSC_RC32MEN_bm | OSC_RC32KEN_bm;
+ 190:	80 91 50 00 	lds	r24, 0x0050
+ 194:	86 60       	ori	r24, 0x06	; 6
+ 196:	80 93 50 00 	sts	0x0050, r24
+	while (!(OSC.STATUS & OSC_RC32KRDY_bm));
+ 19a:	80 91 51 00 	lds	r24, 0x0051
+ 19e:	82 ff       	sbrs	r24, 2
+ 1a0:	fc cf       	rjmp	.-8      	; 0x19a <clock_setup+0xa>
+	while (!(OSC.STATUS & OSC_RC32MRDY_bm));
+ 1a2:	80 91 51 00 	lds	r24, 0x0051
+ 1a6:	81 ff       	sbrs	r24, 1
+ 1a8:	fc cf       	rjmp	.-8      	; 0x1a2 <clock_setup+0x12>
+	DFLLRC32M.CTRL = DFLL_ENABLE_bm;
+ 1aa:	81 e0       	ldi	r24, 0x01	; 1
+ 1ac:	80 93 60 00 	sts	0x0060, r24
+	CCP = CCP_IOREG_gc;
+ 1b0:	98 ed       	ldi	r25, 0xD8	; 216
+ 1b2:	94 bf       	out	0x34, r25	; 52
+	CLK.CTRL = CLK_SCLKSEL_RC32M_gc;
+ 1b4:	80 93 40 00 	sts	0x0040, r24
+	OSC.CTRL &= ~OSC_RC2MEN_bm;
+ 1b8:	80 91 50 00 	lds	r24, 0x0050
+ 1bc:	8e 7f       	andi	r24, 0xFE	; 254
+ 1be:	80 93 50 00 	sts	0x0050, r24
+ 1c2:	08 95       	ret
+
+000001c4 <setup>:
+}
+
+void io_setup() {
+	PORTB.OUT = 0x00;
+ 1c4:	e0 e2       	ldi	r30, 0x20	; 32
+ 1c6:	f6 e0       	ldi	r31, 0x06	; 6
+ 1c8:	14 82       	std	Z+4, r1	; 0x04
+	PORTB.DIR = 0x0F;
+ 1ca:	8f e0       	ldi	r24, 0x0F	; 15
+ 1cc:	80 83       	st	Z, r24
+	//PORTB.PIN0CTRL = (PORT_OPC_TOTEM_gc | PORT_ISC_BOTHEDGES_gc);
+	//PORTB.PIN1CTRL = (PORT_OPC_TOTEM_gc | PORT_ISC_BOTHEDGES_gc);
+	//PORTB.PIN2CTRL = (PORT_OPC_TOTEM_gc | PORT_ISC_INPUT_DISABLE_gc);
+	//PORTB.PIN3CTRL = (PORT_OPC_TOTEM_gc | PORT_ISC_INPUT_DISABLE_gc);
+	PORTB.INT0MASK = 0x0;
+ 1ce:	12 86       	std	Z+10, r1	; 0x0a
+	PORTB.INT1MASK = 0x0;
+ 1d0:	13 86       	std	Z+11, r1	; 0x0b
+	}
+}
+
+void setup() {
+	io_setup();
+	clock_setup();
+ 1d2:	0c 94 c8 00 	jmp	0x190	; 0x190 <clock_setup>
+
+000001d6 <io_setup>:
+	CLK.CTRL = CLK_SCLKSEL_RC32M_gc;
+	OSC.CTRL &= ~OSC_RC2MEN_bm;
+}
+
+void io_setup() {
+	PORTB.OUT = 0x00;
+ 1d6:	e0 e2       	ldi	r30, 0x20	; 32
+ 1d8:	f6 e0       	ldi	r31, 0x06	; 6
+ 1da:	14 82       	std	Z+4, r1	; 0x04
+	PORTB.DIR = 0x0F;
+ 1dc:	8f e0       	ldi	r24, 0x0F	; 15
+ 1de:	80 83       	st	Z, r24
+	//PORTB.PIN0CTRL = (PORT_OPC_TOTEM_gc | PORT_ISC_BOTHEDGES_gc);
+	//PORTB.PIN1CTRL = (PORT_OPC_TOTEM_gc | PORT_ISC_BOTHEDGES_gc);
+	//PORTB.PIN2CTRL = (PORT_OPC_TOTEM_gc | PORT_ISC_INPUT_DISABLE_gc);
+	//PORTB.PIN3CTRL = (PORT_OPC_TOTEM_gc | PORT_ISC_INPUT_DISABLE_gc);
+	PORTB.INT0MASK = 0x0;
+ 1e0:	12 86       	std	Z+10, r1	; 0x0a
+	PORTB.INT1MASK = 0x0;
+ 1e2:	13 86       	std	Z+11, r1	; 0x0b
+ 1e4:	08 95       	ret
+
+000001e6 <dac_setup>:
+}
+
+void dac_setup() {
+	DACB.CTRLA &= ~(DAC_IDOEN_bm | DAC_CH0EN_bm | DAC_CH1EN_bm);
+ 1e6:	e0 e2       	ldi	r30, 0x20	; 32
+ 1e8:	f3 e0       	ldi	r31, 0x03	; 3
+ 1ea:	80 81       	ld	r24, Z
+ 1ec:	83 7e       	andi	r24, 0xE3	; 227
+ 1ee:	80 83       	st	Z, r24
+	DACB.CTRLA |= (DAC_CH0EN_bm | DAC_CH1EN_bm | DAC_ENABLE_bm);
+ 1f0:	80 81       	ld	r24, Z
+ 1f2:	8d 60       	ori	r24, 0x0D	; 13
+ 1f4:	80 83       	st	Z, r24
+
+	DACB.CTRLB &= ~(DAC_CHSEL_gm | DAC_CH0TRIG_bm | DAC_CH1TRIG_bm);
+ 1f6:	81 81       	ldd	r24, Z+1	; 0x01
+ 1f8:	8c 79       	andi	r24, 0x9C	; 156
+ 1fa:	81 83       	std	Z+1, r24	; 0x01
+	DACB.CTRLB |= DAC_CHSEL_DUAL_gc;
+ 1fc:	81 81       	ldd	r24, Z+1	; 0x01
+ 1fe:	80 64       	ori	r24, 0x40	; 64
+ 200:	81 83       	std	Z+1, r24	; 0x01
+
+	DACB.CTRLC &= ~(DAC_REFSEL_gm | DAC_LEFTADJ_bm);
+ 202:	82 81       	ldd	r24, Z+2	; 0x02
+ 204:	86 7e       	andi	r24, 0xE6	; 230
+ 206:	82 83       	std	Z+2, r24	; 0x02
+	DACB.CTRLC |= DAC_REFSEL_AVCC_gc;
+ 208:	82 81       	ldd	r24, Z+2	; 0x02
+ 20a:	88 60       	ori	r24, 0x08	; 8
+ 20c:	82 83       	std	Z+2, r24	; 0x02
+ 20e:	08 95       	ret
+
+00000210 <main>:
+void io_setup();
+void dac_setup();
+void setup();
+
+int main(void) {
+	setup();
+ 210:	0e 94 e2 00 	call	0x1c4	; 0x1c4 <setup>
+	for(;;) {
+		PORTB.OUT = ~PORTB.OUT;
+ 214:	80 91 24 06 	lds	r24, 0x0624
+ 218:	80 95       	com	r24
+ 21a:	80 93 24 06 	sts	0x0624, r24
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+ 21e:	2f ef       	ldi	r18, 0xFF	; 255
+ 220:	87 ea       	ldi	r24, 0xA7	; 167
+ 222:	91 e6       	ldi	r25, 0x61	; 97
+ 224:	21 50       	subi	r18, 0x01	; 1
+ 226:	80 40       	sbci	r24, 0x00	; 0
+ 228:	90 40       	sbci	r25, 0x00	; 0
+ 22a:	e1 f7       	brne	.-8      	; 0x224 <main+0x14>
+ 22c:	00 c0       	rjmp	.+0      	; 0x22e <main+0x1e>
+ 22e:	00 00       	nop
+ 230:	f1 cf       	rjmp	.-30     	; 0x214 <main+0x4>
+
+00000232 <_exit>:
+ 232:	f8 94       	cli
+
+00000234 <__stop_program>:
+ 234:	ff cf       	rjmp	.-2      	; 0x234 <__stop_program>

@@ -1,10 +1,9 @@
-
-###############################################################################
-# Makefile for the project at90can128::read_xyz
-###############################################################################
+###########################################################################
+# Makefile for the project atxmega32a4u::read_xyz
+###########################################################################
 
 ## General Flags
-PROJECT = read_xyz
+PROJECT = main
 MCU = atxmega32a4
 F_CPU = 32000000
 TARGET = $(PROJECT).elf
@@ -15,7 +14,7 @@ COMMON = -mmcu=$(MCU)
 
 ## Compile options common for all C compilation units.
 CFLAGS = $(COMMON)
-CFLAGS += -Wall -gdwarf-2  -O0 -funsigned-char -funsigned-bitfields
+CFLAGS += -Wall -gdwarf-2  -O2 -funsigned-char -funsigned-bitfields
 CFLAGS += -DF_CPU=$(F_CPU)
 CFLAGS += -MD -MP -MT $(*F).o -MF dep/$(@F).d 
 
