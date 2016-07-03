@@ -1,0 +1,6 @@
+*.eep
+*.elf
+*.o
+*.map
+*.lss
+*.swp
