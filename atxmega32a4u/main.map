@@ -112,7 +112,7 @@ LOAD /usr/lib/gcc/avr/4.7.2/avrxmega2/libgcc.a
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x236
+.text           0x00000000      0x246
  *(.vectors)
  .vectors       0x00000000      0x178 /usr/lib/gcc/avr/4.7.2/../../../avr/lib/avrxmega2/crtx32a4.o
                 0x00000000                __vectors
@@ -258,32 +258,32 @@ LOAD /usr/lib/gcc/avr/4.7.2/avrxmega2/libgcc.a
                 0x0000018c                __vector_42
                 0x0000018c                __vector_87
                 0x0000018c                __vector_65
- .text          0x00000190       0x80 main.o
+ .text          0x00000190       0x66 main.o
                 0x00000190                clock_setup
                 0x000001c4                setup
-                0x000001d6                io_setup
-                0x000001e6                dac_setup
- .text          0x00000210        0x0 /usr/lib/gcc/avr/4.7.2/avrxmega2/libgcc.a(_exit.o)
-                0x00000210                . = ALIGN (0x2)
+                0x000001de                io_setup
+                0x000001ee                spi_setup
+ .text          0x000001f6        0x0 /usr/lib/gcc/avr/4.7.2/avrxmega2/libgcc.a(_exit.o)
+                0x000001f6                . = ALIGN (0x2)
  *(.text.*)
- .text.startup  0x00000210       0x22 main.o
-                0x00000210                main
+ .text.startup  0x000001f6       0x4c main.o
+                0x000001f6                main
  .text.libgcc.mul
-                0x00000232        0x0 /usr/lib/gcc/avr/4.7.2/avrxmega2/libgcc.a(_exit.o)
+                0x00000242        0x0 /usr/lib/gcc/avr/4.7.2/avrxmega2/libgcc.a(_exit.o)
  .text.libgcc.div
-                0x00000232        0x0 /usr/lib/gcc/avr/4.7.2/avrxmega2/libgcc.a(_exit.o)
- .text.libgcc   0x00000232        0x0 /usr/lib/gcc/avr/4.7.2/avrxmega2/libgcc.a(_exit.o)
+                0x00000242        0x0 /usr/lib/gcc/avr/4.7.2/avrxmega2/libgcc.a(_exit.o)
+ .text.libgcc   0x00000242        0x0 /usr/lib/gcc/avr/4.7.2/avrxmega2/libgcc.a(_exit.o)
  .text.libgcc.prologue
-                0x00000232        0x0 /usr/lib/gcc/avr/4.7.2/avrxmega2/libgcc.a(_exit.o)
+                0x00000242        0x0 /usr/lib/gcc/avr/4.7.2/avrxmega2/libgcc.a(_exit.o)
  .text.libgcc.builtins
-                0x00000232        0x0 /usr/lib/gcc/avr/4.7.2/avrxmega2/libgcc.a(_exit.o)
+                0x00000242        0x0 /usr/lib/gcc/avr/4.7.2/avrxmega2/libgcc.a(_exit.o)
  .text.libgcc.fmul
-                0x00000232        0x0 /usr/lib/gcc/avr/4.7.2/avrxmega2/libgcc.a(_exit.o)
-                0x00000232                . = ALIGN (0x2)
+                0x00000242        0x0 /usr/lib/gcc/avr/4.7.2/avrxmega2/libgcc.a(_exit.o)
+                0x00000242                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x00000232        0x0 /usr/lib/gcc/avr/4.7.2/avrxmega2/libgcc.a(_exit.o)
-                0x00000232                exit
-                0x00000232                _exit
+ .fini9         0x00000242        0x0 /usr/lib/gcc/avr/4.7.2/avrxmega2/libgcc.a(_exit.o)
+                0x00000242                exit
+                0x00000242                _exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -302,11 +302,11 @@ LOAD /usr/lib/gcc/avr/4.7.2/avrxmega2/libgcc.a
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x00000232        0x4 /usr/lib/gcc/avr/4.7.2/avrxmega2/libgcc.a(_exit.o)
+ .fini0         0x00000242        0x4 /usr/lib/gcc/avr/4.7.2/avrxmega2/libgcc.a(_exit.o)
  *(.fini0)
-                0x00000236                _etext = .
+                0x00000246                _etext = .
 
-.data           0x00802000        0x0 load address 0x00000236
+.data           0x00802000        0x0 load address 0x00000246
                 0x00802000                PROVIDE (__data_start, .)
  *(.data)
  .data          0x00802000        0x0 /usr/lib/gcc/avr/4.7.2/../../../avr/lib/avrxmega2/crtx32a4.o
@@ -329,8 +329,8 @@ LOAD /usr/lib/gcc/avr/4.7.2/avrxmega2/libgcc.a
  *(.bss*)
  *(COMMON)
                 0x00802000                PROVIDE (__bss_end, .)
-                0x00000236                __data_load_start = LOADADDR (.data)
-                0x00000236                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x00000246                __data_load_start = LOADADDR (.data)
+                0x00000246                __data_load_end = (__data_load_start + SIZEOF (.data))
 
 .noinit         0x00802000        0x0
                 0x00802000                PROVIDE (__noinit_start, .)
@@ -400,27 +400,27 @@ LOAD /usr/lib/gcc/avr/4.7.2/avrxmega2/libgcc.a
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000      0x767
+.debug_info     0x00000000      0x60e
  *(.debug_info)
- .debug_info    0x00000000      0x767 main.o
+ .debug_info    0x00000000      0x60e main.o
  *(.gnu.linkonce.wi.*)
 
-.debug_abbrev   0x00000000      0x206
+.debug_abbrev   0x00000000      0x1c1
  *(.debug_abbrev)
- .debug_abbrev  0x00000000      0x206 main.o
+ .debug_abbrev  0x00000000      0x1c1 main.o
 
-.debug_line     0x00000000      0x128
+.debug_line     0x00000000      0x152
  *(.debug_line)
- .debug_line    0x00000000      0x128 main.o
+ .debug_line    0x00000000      0x152 main.o
 
 .debug_frame    0x00000000       0x64
  *(.debug_frame)
  .debug_frame   0x00000000       0x64 main.o
 
-.debug_str      0x00000000      0x4fc
+.debug_str      0x00000000      0x397
  *(.debug_str)
- .debug_str     0x00000000      0x4fc main.o
-                                0x540 (size before relaxing)
+ .debug_str     0x00000000      0x397 main.o
+                                0x3db (size before relaxing)
 
 .debug_loc
  *(.debug_loc)

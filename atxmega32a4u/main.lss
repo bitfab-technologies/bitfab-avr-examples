@@ -3,27 +3,27 @@ main.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         00000236  00000000  00000000  00000054  2**1
+  0 .text         00000246  00000000  00000000  00000054  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .stab         000006cc  00000000  00000000  0000028c  2**2
+  1 .stab         000006cc  00000000  00000000  0000029c  2**2
                   CONTENTS, READONLY, DEBUGGING
-  2 .stabstr      00000054  00000000  00000000  00000958  2**0
+  2 .stabstr      00000054  00000000  00000000  00000968  2**0
                   CONTENTS, READONLY, DEBUGGING
-  3 .comment      00000011  00000000  00000000  000009ac  2**0
+  3 .comment      00000011  00000000  00000000  000009bc  2**0
                   CONTENTS, READONLY
-  4 .debug_aranges 00000028  00000000  00000000  000009bd  2**0
+  4 .debug_aranges 00000028  00000000  00000000  000009cd  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_info   00000767  00000000  00000000  000009e5  2**0
+  5 .debug_info   0000060e  00000000  00000000  000009f5  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_abbrev 00000206  00000000  00000000  0000114c  2**0
+  6 .debug_abbrev 000001c1  00000000  00000000  00001003  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_line   00000128  00000000  00000000  00001352  2**0
+  7 .debug_line   00000152  00000000  00000000  000011c4  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_frame  00000064  00000000  00000000  0000147c  2**2
+  8 .debug_frame  00000064  00000000  00000000  00001318  2**2
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_str    000004fc  00000000  00000000  000014e0  2**0
+  9 .debug_str    00000397  00000000  00000000  0000137c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_ranges 00000018  00000000  00000000  000019dc  2**0
+ 10 .debug_ranges 00000018  00000000  00000000  00001713  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -131,14 +131,14 @@ Disassembly of section .text:
  17e:	df e2       	ldi	r29, 0x2F	; 47
  180:	de bf       	out	0x3e, r29	; 62
  182:	cd bf       	out	0x3d, r28	; 61
- 184:	0e 94 08 01 	call	0x210	; 0x210 <main>
- 188:	0c 94 19 01 	jmp	0x232	; 0x232 <_exit>
+ 184:	0e 94 fb 00 	call	0x1f6	; 0x1f6 <main>
+ 188:	0c 94 21 01 	jmp	0x242	; 0x242 <_exit>
 
 0000018c <__bad_interrupt>:
  18c:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
 
 00000190 <clock_setup>:
-	//dac_setup();
+	spi_setup();
 }
 
 void clock_setup() {
@@ -194,97 +194,115 @@ void io_setup() {
 void setup() {
 	io_setup();
 	clock_setup();
- 1d2:	0c 94 c8 00 	jmp	0x190	; 0x190 <clock_setup>
+ 1d2:	0e 94 c8 00 	call	0x190	; 0x190 <clock_setup>
+	PORTB.INT0MASK = 0x0;
+	PORTB.INT1MASK = 0x0;
+}
 
-000001d6 <io_setup>:
+void spi_setup() {
+	SPIC.CTRL = SPI_ENABLE_bm | SPI_MASTER_bm | SPI_MODE_0_gc | SPI_PRESCALER0_bm;
+ 1d6:	81 e5       	ldi	r24, 0x51	; 81
+ 1d8:	80 93 c0 08 	sts	0x08C0, r24
+ 1dc:	08 95       	ret
+
+000001de <io_setup>:
 	CLK.CTRL = CLK_SCLKSEL_RC32M_gc;
 	OSC.CTRL &= ~OSC_RC2MEN_bm;
 }
 
 void io_setup() {
 	PORTB.OUT = 0x00;
- 1d6:	e0 e2       	ldi	r30, 0x20	; 32
- 1d8:	f6 e0       	ldi	r31, 0x06	; 6
- 1da:	14 82       	std	Z+4, r1	; 0x04
+ 1de:	e0 e2       	ldi	r30, 0x20	; 32
+ 1e0:	f6 e0       	ldi	r31, 0x06	; 6
+ 1e2:	14 82       	std	Z+4, r1	; 0x04
 	PORTB.DIR = 0x0F;
- 1dc:	8f e0       	ldi	r24, 0x0F	; 15
- 1de:	80 83       	st	Z, r24
+ 1e4:	8f e0       	ldi	r24, 0x0F	; 15
+ 1e6:	80 83       	st	Z, r24
 	//PORTB.PIN0CTRL = (PORT_OPC_TOTEM_gc | PORT_ISC_BOTHEDGES_gc);
 	//PORTB.PIN1CTRL = (PORT_OPC_TOTEM_gc | PORT_ISC_BOTHEDGES_gc);
 	//PORTB.PIN2CTRL = (PORT_OPC_TOTEM_gc | PORT_ISC_INPUT_DISABLE_gc);
 	//PORTB.PIN3CTRL = (PORT_OPC_TOTEM_gc | PORT_ISC_INPUT_DISABLE_gc);
 	PORTB.INT0MASK = 0x0;
- 1e0:	12 86       	std	Z+10, r1	; 0x0a
+ 1e8:	12 86       	std	Z+10, r1	; 0x0a
 	PORTB.INT1MASK = 0x0;
- 1e2:	13 86       	std	Z+11, r1	; 0x0b
- 1e4:	08 95       	ret
+ 1ea:	13 86       	std	Z+11, r1	; 0x0b
+ 1ec:	08 95       	ret
 
-000001e6 <dac_setup>:
+000001ee <spi_setup>:
 }
 
-void dac_setup() {
-	DACB.CTRLA &= ~(DAC_IDOEN_bm | DAC_CH0EN_bm | DAC_CH1EN_bm);
- 1e6:	e0 e2       	ldi	r30, 0x20	; 32
- 1e8:	f3 e0       	ldi	r31, 0x03	; 3
- 1ea:	80 81       	ld	r24, Z
- 1ec:	83 7e       	andi	r24, 0xE3	; 227
- 1ee:	80 83       	st	Z, r24
-	DACB.CTRLA |= (DAC_CH0EN_bm | DAC_CH1EN_bm | DAC_ENABLE_bm);
- 1f0:	80 81       	ld	r24, Z
- 1f2:	8d 60       	ori	r24, 0x0D	; 13
- 1f4:	80 83       	st	Z, r24
+void spi_setup() {
+	SPIC.CTRL = SPI_ENABLE_bm | SPI_MASTER_bm | SPI_MODE_0_gc | SPI_PRESCALER0_bm;
+ 1ee:	81 e5       	ldi	r24, 0x51	; 81
+ 1f0:	80 93 c0 08 	sts	0x08C0, r24
+ 1f4:	08 95       	ret
 
-	DACB.CTRLB &= ~(DAC_CHSEL_gm | DAC_CH0TRIG_bm | DAC_CH1TRIG_bm);
- 1f6:	81 81       	ldd	r24, Z+1	; 0x01
- 1f8:	8c 79       	andi	r24, 0x9C	; 156
- 1fa:	81 83       	std	Z+1, r24	; 0x01
-	DACB.CTRLB |= DAC_CHSEL_DUAL_gc;
- 1fc:	81 81       	ldd	r24, Z+1	; 0x01
- 1fe:	80 64       	ori	r24, 0x40	; 64
- 200:	81 83       	std	Z+1, r24	; 0x01
-
-	DACB.CTRLC &= ~(DAC_REFSEL_gm | DAC_LEFTADJ_bm);
- 202:	82 81       	ldd	r24, Z+2	; 0x02
- 204:	86 7e       	andi	r24, 0xE6	; 230
- 206:	82 83       	std	Z+2, r24	; 0x02
-	DACB.CTRLC |= DAC_REFSEL_AVCC_gc;
- 208:	82 81       	ldd	r24, Z+2	; 0x02
- 20a:	88 60       	ori	r24, 0x08	; 8
- 20c:	82 83       	std	Z+2, r24	; 0x02
- 20e:	08 95       	ret
-
-00000210 <main>:
-void io_setup();
-void dac_setup();
-void setup();
+000001f6 <main>:
+#define SPI_SS2 PORTA.PIN2_bm
+#define SPI_SS3 PORTA.PIN1_bm
+#define SPI_SS4 PORTA.PIN0_bm // SDMMC on SS4
 
 int main(void) {
 	setup();
- 210:	0e 94 e2 00 	call	0x1c4	; 0x1c4 <setup>
+ 1f6:	0e 94 e2 00 	call	0x1c4	; 0x1c4 <setup>
 	for(;;) {
-		PORTB.OUT = ~PORTB.OUT;
- 214:	80 91 24 06 	lds	r24, 0x0624
- 218:	80 95       	com	r24
- 21a:	80 93 24 06 	sts	0x0624, r24
+		PORTB.OUT = LED_YELLOW_gc;
+		_delay_ms(1000);
+		PORTB.OUT = LED_RED_gc;
+ 1fa:	91 e0       	ldi	r25, 0x01	; 1
+		_delay_ms(1000);
+		PORTB.OUT = LED_GREEN_gc;
+ 1fc:	82 e0       	ldi	r24, 0x02	; 2
+#define SPI_SS4 PORTA.PIN0_bm // SDMMC on SS4
+
+int main(void) {
+	setup();
+	for(;;) {
+		PORTB.OUT = LED_YELLOW_gc;
+ 1fe:	10 92 24 06 	sts	0x0624, r1
 	#else
 		//round up by default
 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
 	#endif
 
 	__builtin_avr_delay_cycles(__ticks_dc);
- 21e:	2f ef       	ldi	r18, 0xFF	; 255
- 220:	87 ea       	ldi	r24, 0xA7	; 167
- 222:	91 e6       	ldi	r25, 0x61	; 97
- 224:	21 50       	subi	r18, 0x01	; 1
- 226:	80 40       	sbci	r24, 0x00	; 0
- 228:	90 40       	sbci	r25, 0x00	; 0
- 22a:	e1 f7       	brne	.-8      	; 0x224 <main+0x14>
- 22c:	00 c0       	rjmp	.+0      	; 0x22e <main+0x1e>
- 22e:	00 00       	nop
- 230:	f1 cf       	rjmp	.-30     	; 0x214 <main+0x4>
+ 202:	2f ef       	ldi	r18, 0xFF	; 255
+ 204:	37 ea       	ldi	r19, 0xA7	; 167
+ 206:	41 e6       	ldi	r20, 0x61	; 97
+ 208:	21 50       	subi	r18, 0x01	; 1
+ 20a:	30 40       	sbci	r19, 0x00	; 0
+ 20c:	40 40       	sbci	r20, 0x00	; 0
+ 20e:	e1 f7       	brne	.-8      	; 0x208 <main+0x12>
+ 210:	00 c0       	rjmp	.+0      	; 0x212 <main+0x1c>
+ 212:	00 00       	nop
+		_delay_ms(1000);
+		PORTB.OUT = LED_RED_gc;
+ 214:	90 93 24 06 	sts	0x0624, r25
+ 218:	2f ef       	ldi	r18, 0xFF	; 255
+ 21a:	37 ea       	ldi	r19, 0xA7	; 167
+ 21c:	41 e6       	ldi	r20, 0x61	; 97
+ 21e:	21 50       	subi	r18, 0x01	; 1
+ 220:	30 40       	sbci	r19, 0x00	; 0
+ 222:	40 40       	sbci	r20, 0x00	; 0
+ 224:	e1 f7       	brne	.-8      	; 0x21e <main+0x28>
+ 226:	00 c0       	rjmp	.+0      	; 0x228 <main+0x32>
+ 228:	00 00       	nop
+		_delay_ms(1000);
+		PORTB.OUT = LED_GREEN_gc;
+ 22a:	80 93 24 06 	sts	0x0624, r24
+ 22e:	2f ef       	ldi	r18, 0xFF	; 255
+ 230:	37 ea       	ldi	r19, 0xA7	; 167
+ 232:	41 e6       	ldi	r20, 0x61	; 97
+ 234:	21 50       	subi	r18, 0x01	; 1
+ 236:	30 40       	sbci	r19, 0x00	; 0
+ 238:	40 40       	sbci	r20, 0x00	; 0
+ 23a:	e1 f7       	brne	.-8      	; 0x234 <main+0x3e>
+ 23c:	00 c0       	rjmp	.+0      	; 0x23e <main+0x48>
+ 23e:	00 00       	nop
+ 240:	de cf       	rjmp	.-68     	; 0x1fe <main+0x8>
 
-00000232 <_exit>:
- 232:	f8 94       	cli
+00000242 <_exit>:
+ 242:	f8 94       	cli
 
-00000234 <__stop_program>:
- 234:	ff cf       	rjmp	.-2      	; 0x234 <__stop_program>
+00000244 <__stop_program>:
+ 244:	ff cf       	rjmp	.-2      	; 0x244 <__stop_program>

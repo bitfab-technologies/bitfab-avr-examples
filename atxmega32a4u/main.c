@@ -12,15 +12,23 @@ void io_setup();
 void setup();
 void spi_setup();
 
-volatile int SPI_SS1 = PORTA.PIN3_bm; // MPU9250 on SS1,2,3
-volatile int SPI_SS2 = PORTA.PIN2_bm;
-volatile int SPI_SS3 = PORTA.PIN1_bm;
-volatile int SPI_SS4 = PORTA.PIN0_bm; // SDMMC on SS4
+#define LED_RED_gc 0x1
+#define LED_GREEN_gc 0x2
+#define LED_YELLOW_gc 0x0
+
+#define SPI_SS1 PORTA.PIN3_bm // MPU9250 on SS1,2,3
+#define SPI_SS2 PORTA.PIN2_bm
+#define SPI_SS3 PORTA.PIN1_bm
+#define SPI_SS4 PORTA.PIN0_bm // SDMMC on SS4
 
 int main(void) {
 	setup();
 	for(;;) {
-		PORTB.OUT = ~PORTB.OUT;
+		PORTB.OUT = LED_YELLOW_gc;
+		_delay_ms(1000);
+		PORTB.OUT = LED_RED_gc;
+		_delay_ms(1000);
+		PORTB.OUT = LED_GREEN_gc;
 		_delay_ms(1000);
 	}
 }
@@ -54,5 +62,5 @@ void io_setup() {
 }
 
 void spi_setup() {
-	SPIC.CTRL = SPI_ENABLE_bm | SPI_MASTER_bm | SPI_MODE_bm | SPI_PRESCALER0_bm;
+	SPIC.CTRL = SPI_ENABLE_bm | SPI_MASTER_bm | SPI_MODE_0_gc | SPI_PRESCALER0_bm;
 }
