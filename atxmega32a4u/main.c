@@ -7,60 +7,62 @@
 #define F_CPU  32000000  // 32MHz
 #endif
 
-void clock_setup();
-void io_setup();
+#include "clock.h"
+#include "spi.h"
+#include "MPU9250.h"
+#include "sdmmc.h"
+#include "ui.h"
+
+#define SPI_PORT PORTC
+#define SS1 PA3
+#define SS2 PA2
+#define SS3 PA1
+#define SS4 PA0
+
+#define MPU_DATA_gc (MPU_GYRO_EN_bm | MPU_ACC_EN_bm | MPU_MAG_EN_bm)
+
 void setup();
-void spi_setup();
 
-#define LED_RED_gc 0x1
-#define LED_GREEN_gc 0x2
-#define LED_YELLOW_gc 0x0
+void main()
+{
+  setup();
 
-#define SPI_SS1 PORTA.PIN3_bm // MPU9250 on SS1,2,3
-#define SPI_SS2 PORTA.PIN2_bm
-#define SPI_SS3 PORTA.PIN1_bm
-#define SPI_SS4 PORTA.PIN0_bm // SDMMC on SS4
-
-int main(void) {
-	setup();
-	for(;;) {
-		PORTB.OUT = LED_YELLOW_gc;
-		_delay_ms(1000);
-		PORTB.OUT = LED_RED_gc;
-		_delay_ms(1000);
-		PORTB.OUT = LED_GREEN_gc;
-		_delay_ms(1000);
-	}
+  while(1)
+  {
+    if (mpu1.exist)
+    { mpu1_data = mpu1.get_data(MPU_DATA_gc); }
+    
+    if (mpu2.exist)
+    { mpu2_data = mpu2.get_data(MPU_DATA_gc); }
+    
+    if (mpu3.exist)
+    { mpu3_data = mpu3.get_data(MPU_DATA_gc); }
+    
+    if (sdmmc.exist)
+    {
+      sdmmc.log_data(millis(), mpu1_data);
+      sdmmc.log_data(millis(), mpu2_data);
+      sdmmc.log_data(millis(), mpu3_data);
+    }
+  }
 }
 
-void setup() {
-	io_setup();
-	clock_setup();
-	spi_setup();
-}
+void setup()
+{
+  clock_setup(); //32MHz
+  io_setup();
+  spi_init(&SPI_PORT, SPI_BAUD_1MHz_gc);
 
-void clock_setup() {
-	//configure clock to 32MHz
-	OSC.CTRL |= OSC_RC32MEN_bm | OSC_RC32KEN_bm;
-	while (!(OSC.STATUS & OSC_RC32KRDY_bm));
-	while (!(OSC.STATUS & OSC_RC32MRDY_bm));
-	DFLLRC32M.CTRL = DFLL_ENABLE_bm;
-	CCP = CCP_IOREG_gc;
-	CLK.CTRL = CLK_SCLKSEL_RC32M_gc;
-	OSC.CTRL &= ~OSC_RC2MEN_bm;
+  mpu1 =  mpu9250_init(SS1);
+  mpu2 =  mpu9250_init(SS2);
+  mpu3 =  mpu9250_init(SS3);
+  sdmmc = sdmmc_init(SS4, SDMMC_NEW_FILE_EVERY_RESET_bm);
 }
 
 void io_setup() {
-	PORTB.OUT = 0x00;
-	PORTB.DIR = 0x0F;
-	//PORTB.PIN0CTRL = (PORT_OPC_TOTEM_gc | PORT_ISC_BOTHEDGES_gc);
-	//PORTB.PIN1CTRL = (PORT_OPC_TOTEM_gc | PORT_ISC_BOTHEDGES_gc);
-	//PORTB.PIN2CTRL = (PORT_OPC_TOTEM_gc | PORT_ISC_INPUT_DISABLE_gc);
-	//PORTB.PIN3CTRL = (PORT_OPC_TOTEM_gc | PORT_ISC_INPUT_DISABLE_gc);
-	PORTB.INT0MASK = 0x0;
-	PORTB.INT1MASK = 0x0;
-}
-
-void spi_setup() {
-	SPIC.CTRL = SPI_ENABLE_bm | SPI_MASTER_bm | SPI_MODE_0_gc | SPI_PRESCALER0_bm;
+  PORTB.OUT = 0x0;
+  PORTB.DIR = 0xF;
+  PORTB.INT0MASK = 0x0;
+  PORTB.INT1MASK = 0x0;
+  PORTR.DIR = 0x0;
 }
